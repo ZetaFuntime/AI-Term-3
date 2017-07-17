@@ -16,7 +16,7 @@ GameObject::~GameObject()
 void GameObject::Update(float deltaTime)
 {
 	if (m_behaviour != nullptr)
-		m_behaviour->Update(this, deltaTime);
+	 	m_behaviour->Update(this, deltaTime);
 	SimulatePhysics(deltaTime);
 }
 
@@ -82,7 +82,7 @@ void GameObject::SetFriction(float friction)
 
 void GameObject::SetBehaviour(Behaviour *behaviour)
 {
-	if (m_behaviour && m_behaviour->IsOwnedByGameObject() == false)
+	if (m_behaviour && m_behaviour->IsOwnedByGameObject() == true)
 		delete m_behaviour;
 
 	m_behaviour = behaviour;

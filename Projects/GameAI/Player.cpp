@@ -1,16 +1,31 @@
 #include "Player.h"
 #include "KeyboardBehaviour.h"
+#include "SeekBehaviour.h"
+
 #include <Input.h>
+
 Player::Player() : GameObject()
 {
 	m_keyboardBehaviour = new KeyboardBehaviour();
 	m_keyboardBehaviour->IsOwnedByGameObject(false);
 
-	//m_seekBehaviour = new SeekBehaviour();
-	//m_seekBehaviour->SetStrength(100);
-	//
-	//m_fleeBehaviour = new fleeBehaviour();
-	// m_fleeBehaviour->SetStrength(100);
+	m_seekBehaviour = new SeekBehaviour();
+	m_seekBehaviour->IsOwnedByGameObject(false);
+	m_seekBehaviour->SetForceStrength(100);
+	m_seekBehaviour->SetInnerRadius(20);
+	m_seekBehaviour->SetOuterRadius(100);
+	m_seekBehaviour->OnInnerRadiusEnter([this]() {
+		SetBehaviour(m_keyboardBehaviour);
+	});
+
+	m_fleeBehaviour = new SeekBehaviour();
+	m_fleeBehaviour->IsOwnedByGameObject(false);
+	m_fleeBehaviour->SetForceStrength(-100);
+	m_fleeBehaviour->SetInnerRadius(20);
+	m_fleeBehaviour->SetOuterRadius(100);
+	m_fleeBehaviour->OnOuterRadiusExit([this]() {
+	 SetBehaviour(m_keyboardBehaviour);
+	});
 
 	SetBehaviour(new KeyboardBehaviour());
 
@@ -21,7 +36,8 @@ Player::~Player()
 {
 	SetBehaviour(nullptr);
 
-	//delete m_seekBehaviour;
+	delete m_fleeBehaviour;
+	delete m_seekBehaviour;
 	delete m_keyboardBehaviour;
 }
 
@@ -29,21 +45,18 @@ void Player::Update(float deltaTime)
 {
 	// todo: player update logic stuff
 	aie::Input *input = aie::Input::getInstance();
+	int mX, mY;
+	input->getMouseXY(&mX, &mY);
+
 	if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_LEFT))
 	{
-		/*
-		m_seekBehaviour = new SeekBehaviour(mouseX,mouseY);
-		m_seek->SetStrength(100);
-		m_seek->SetTarget(glm::vec2(mX,mY);
-		SetBehaviour ( m_seek );
-		*/
+		m_seekBehaviour->SetTarget(glm::vec2(mX,mY));
+		SetBehaviour ( m_seekBehaviour);
 	}
 	else if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_RIGHT))
 	{
-		 /*
-			  m_flee->SetTarget(glm::vec2(mX,mY));
-			  SetBehaviour( m_flee );
-		 */
+		m_fleeBehaviour->SetTarget(glm::vec2(mX,mY));
+		SetBehaviour( m_fleeBehaviour );
 	}
 
 	if (GetBehaviour() != m_keyboardBehaviour && input->getPressedKeys().empty() == false)

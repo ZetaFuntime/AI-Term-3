@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "KeyboardBehaviour.h"
+#include "SeekBehaviour.h"
 
 class Player : public GameObject
 {
@@ -15,5 +16,7 @@ public:
 protected:
 
 	KeyboardBehaviour *m_keyboardBehaviour;
+	SeekBehaviour *m_seekBehaviour;
+	SeekBehaviour *m_fleeBehaviour;
 private:
 };
