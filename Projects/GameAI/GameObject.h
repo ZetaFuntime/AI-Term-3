@@ -7,6 +7,11 @@ namespace aie
 	class Renderer2D;
 }
 
+enum ColourPalette
+{
+	GREEN = 0x1ABF15FF, YELLOW = 0xE5EC13FF, ORANGE = 0xF1740BFF, RED = 0xF1190BFF, WHITE = 0xFFFFFFFF
+};
+
 class Behaviour;
 
 class GameObject
@@ -31,6 +36,8 @@ public:
 	void SetVelocity(const glm::vec2 &vel);
 	void SetFriction(float friction);
 	void SetBehaviour(Behaviour *behaviour);
+	ColourPalette paletteSwitch();
+
 protected:
 
 	glm::vec2 m_position;

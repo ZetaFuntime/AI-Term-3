@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include <Renderer2D.h>
 #include "Behaviour.h"
+#include <iostream>
 
 GameObject::GameObject() : m_friction (0.0f), m_behaviour(nullptr)
 {
@@ -9,7 +10,7 @@ GameObject::GameObject() : m_friction (0.0f), m_behaviour(nullptr)
 
 GameObject::~GameObject()
 {
-	delete m_behaviour;
+	SetBehaviour(nullptr);
 }
 
 void GameObject::Update(float deltaTime)
@@ -21,13 +22,11 @@ void GameObject::Update(float deltaTime)
 
 void GameObject::Draw(aie::Renderer2D * renderer)
 {
-
 	glm::vec2 targetHeading = m_position + m_velocity;
 	renderer->drawCircle(m_position.x, m_position.y, 8);
-	renderer->setRenderColour(0xFF7F00FF);
+	renderer->setRenderColour(paletteSwitch());
 	renderer->drawLine(m_position.x, m_position.y, targetHeading.x, targetHeading.y, 2.0f);
 	renderer->setRenderColour(0xFFFFFFFF);
-
 	if (m_behaviour != nullptr)
 		m_behaviour->Draw(this, renderer);
 }
@@ -83,6 +82,18 @@ void GameObject::SetFriction(float friction)
 
 void GameObject::SetBehaviour(Behaviour *behaviour)
 {
-	delete m_behaviour; 
+	if (m_behaviour && m_behaviour->IsOwnedByGameObject() == false)
+		delete m_behaviour;
+
 	m_behaviour = behaviour;
+}
+
+ColourPalette GameObject::paletteSwitch()
+{
+	float colourChange = m_velocity.x + m_velocity.y;
+	std::cout << colourChange << std::endl;
+	ColourPalette newColour = (colourChange < 100.f && colourChange > -100.f) ? GREEN : 
+							  (colourChange < 200.f && colourChange > -200.f) ? YELLOW : 
+							  (colourChange < 300.f && colourChange > -300.f) ? ORANGE : RED;
+	return newColour;
 }

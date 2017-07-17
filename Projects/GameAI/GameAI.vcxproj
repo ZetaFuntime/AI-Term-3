@@ -97,12 +97,14 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="KeyboardBehaviour.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Behaviour.h" />
     <ClInclude Include="GameAIApp.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="KeyboardBehaviour.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

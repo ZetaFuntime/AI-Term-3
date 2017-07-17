@@ -5,7 +5,7 @@
 
 #include "GameObject.h"
 #include "KeyboardBehaviour.h"
-
+#include "Player.h"
 GameAIApp::GameAIApp() {
 
 }
@@ -19,10 +19,10 @@ bool GameAIApp::startup() {
 	m_2dRenderer = new aie::Renderer2D();
 	m_font = new aie::Font("./font/consolas.ttf", 32);
 
-	m_player = new GameObject();
+	m_player = new Player();
 	m_player->SetPosition(glm::vec2(getWindowWidth()*0.5f, getWindowHeight()*0.5f));
-	m_player->SetFriction(0.5f);
-	m_player->SetBehaviour(new KeyboardBehaviour());
+	//m_player->SetFriction(0.5f);
+	//m_player->SetBehaviour(new KeyboardBehaviour());
 	return true;
 }
 
@@ -42,18 +42,16 @@ void GameAIApp::update(float deltaTime) {
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
 
-	if (input->isKeyDown(aie::INPUT_KEY_D))
-		m_player->ApplyForce(glm::vec2(100, 0));
-
-
 	m_player->Update(deltaTime); 
 
+	// wrap the player around the screen
+	// ---------------------------------
 	const glm::vec2 &playerPos = m_player->GetPosition();
 	if (playerPos.x < 0) m_player->SetPosition(glm::vec2(getWindowWidth(), playerPos.y));
 	if (playerPos.x > getWindowWidth()) m_player->SetPosition(glm::vec2(0, playerPos.y));
 	if (playerPos.y < 0) m_player->SetPosition(glm::vec2(playerPos.x, getWindowHeight()));
 	if (playerPos.y > getWindowHeight()) m_player->SetPosition(glm::vec2(playerPos.x, 0));
-
+	// ---------------------------------
 }
 
 void GameAIApp::draw() {
