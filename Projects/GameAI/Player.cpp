@@ -1,7 +1,8 @@
 #include "Player.h"
 #include "KeyboardBehaviour.h"
 #include "SeekBehaviour.h"
-
+#include "Path.h"
+#include "FollowPathBehaviour.h"
 #include <Input.h>
 
 Player::Player() : GameObject()
@@ -27,6 +28,12 @@ Player::Player() : GameObject()
 	 SetBehaviour(m_keyboardBehaviour);
 	});
 
+	m_path = new Path();
+
+	m_followPathBehaviour = new FollowPathBehaviour();
+	m_followPathBehaviour->IsOwnedByGameObject(false);
+	m_followPathBehaviour->SetPath(m_path);
+
 	SetBehaviour(new KeyboardBehaviour());
 
 	SetFriction(0.25f);
@@ -36,6 +43,8 @@ Player::~Player()
 {
 	SetBehaviour(nullptr);
 
+	delete m_path;
+	delete m_followPathBehaviour;
 	delete m_fleeBehaviour;
 	delete m_seekBehaviour;
 	delete m_keyboardBehaviour;
@@ -57,6 +66,16 @@ void Player::Update(float deltaTime)
 	{
 		m_fleeBehaviour->SetTarget(glm::vec2(mX,mY));
 		SetBehaviour( m_fleeBehaviour );
+	}
+	else if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_MIDDLE))
+	{
+		if (GetBehaviour() != m_followPathBehaviour)
+		{
+			SetBehaviour(m_followPathBehaviour);
+			m_path->Clear();
+		}
+
+		m_path->PushPathSegment(glm::vec2(mX, mY));
 	}
 
 	if (GetBehaviour() != m_keyboardBehaviour && input->getPressedKeys().empty() == false)

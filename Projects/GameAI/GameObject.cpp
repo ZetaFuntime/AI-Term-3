@@ -3,7 +3,7 @@
 #include "Behaviour.h"
 #include <iostream>
 
-GameObject::GameObject() : m_friction (0.0f), m_behaviour(nullptr)
+GameObject::GameObject() : m_friction (1.0f), m_behaviour(nullptr)
 {
 
 }

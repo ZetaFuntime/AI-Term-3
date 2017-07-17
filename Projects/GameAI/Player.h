@@ -1,8 +1,10 @@
 #pragma once
 
 #include "GameObject.h"
-#include "KeyboardBehaviour.h"
-#include "SeekBehaviour.h"
+class KeyboardBehaviour;
+class SeekBehaviour;
+class FollowPathBehaviour;
+class Path;
 
 class Player : public GameObject
 {
@@ -18,5 +20,10 @@ protected:
 	KeyboardBehaviour *m_keyboardBehaviour;
 	SeekBehaviour *m_seekBehaviour;
 	SeekBehaviour *m_fleeBehaviour;
+	FollowPathBehaviour *m_followPathBehaviour;
+
+	Path *m_path;
+
+
 private:
 };

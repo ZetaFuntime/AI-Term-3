@@ -93,18 +93,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FollowPathBehaviour.cpp" />
     <ClCompile Include="GameAIApp.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="KeyboardBehaviour.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Path.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SeekBehaviour.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Behaviour.h" />
+    <ClInclude Include="FollowPathBehaviour.h" />
     <ClInclude Include="GameAIApp.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="KeyboardBehaviour.h" />
+    <ClInclude Include="Path.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SeekBehaviour.h" />
   </ItemGroup>
