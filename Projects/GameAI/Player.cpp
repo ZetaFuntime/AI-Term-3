@@ -11,6 +11,7 @@ Player::Player() : GameObject()
 	//
 	//m_fleeBehaviour = new fleeBehaviour();
 	// m_fleeBehaviour->SetStrength(100);
+
 	SetBehaviour(new KeyboardBehaviour());
 
 	SetFriction(0.25f);
