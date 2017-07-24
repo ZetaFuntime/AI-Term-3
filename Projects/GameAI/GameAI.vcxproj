@@ -101,6 +101,7 @@
     <ClCompile Include="KeyboardBehaviour.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Path.cpp" />
+    <ClCompile Include="Pathfinder.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SeekBehaviour.cpp" />
   </ItemGroup>
@@ -114,6 +115,7 @@
     <ClInclude Include="Graph2DRenderer.h" />
     <ClInclude Include="KeyboardBehaviour.h" />
     <ClInclude Include="Path.h" />
+    <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SeekBehaviour.h" />
   </ItemGroup>

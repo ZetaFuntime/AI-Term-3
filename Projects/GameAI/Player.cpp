@@ -3,10 +3,19 @@
 #include "SeekBehaviour.h"
 #include "Path.h"
 #include "FollowPathBehaviour.h"
+
 #include <Input.h>
+#include <Renderer2D.h>
+
+#include "Graph2D.h"
+#include "Pathfinder.h"
 
 Player::Player() : GameObject()
 {
+	m_graph =		nullptr;
+	m_startNode =	nullptr;
+	m_endNode =		nullptr;
+
 	m_keyboardBehaviour = new KeyboardBehaviour();
 	m_keyboardBehaviour->IsOwnedByGameObject(false);
 
@@ -62,20 +71,60 @@ void Player::Update(float deltaTime)
 		m_seekBehaviour->SetTarget(glm::vec2(mX,mY));
 		SetBehaviour ( m_seekBehaviour);
 	}
+
 	else if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_RIGHT))
 	{
 		m_fleeBehaviour->SetTarget(glm::vec2(mX,mY));
 		SetBehaviour( m_fleeBehaviour );
 	}
+
 	else if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_MIDDLE))
 	{
-		if (GetBehaviour() != m_followPathBehaviour)
-		{
-			SetBehaviour(m_followPathBehaviour);
-			m_path->Clear();
-		}
+		std::vector<Graph2D::Node *> nearbyNodes;
+		m_graph->GetNearbyNodes(glm::vec2(mX,mY), 8, nearbyNodes);
 
-		m_path->PushPathSegment(glm::vec2(mX, mY));
+		if (nearbyNodes.empty() == false)
+		{
+			if (m_startNode == nullptr)
+			{
+				m_startNode = nearbyNodes[0];
+			}
+			else if (m_endNode == nullptr)
+			{
+				m_endNode = nearbyNodes[0];
+				// TODO: start our pathfinding
+				m_pathfinder = new Pathfinder(m_graph);
+				m_pathfinder->FindPath(m_startNode, [this](Graph2D::Node *n) {
+					return n == m_endNode;
+				});
+
+				//while (m_pathfinder->PathFound() == false)
+				{
+					m_pathfinder->UpdateSearch();
+				}
+
+				//Path p = m_pathfinder->GetPath();
+				m_path->Clear();
+				m_path->PushPathSegment(m_startNode->data);
+				m_path->PushPathSegment(m_endNode->data);
+
+				SetBehaviour(m_followPathBehaviour);
+			}
+			else
+			{
+				m_startNode = nullptr;
+				m_endNode = nullptr;
+				delete m_pathfinder;
+				m_pathfinder = nullptr;
+			}
+		}
+		//if (GetBehaviour() != m_followPathBehaviour)
+		//{
+		//	SetBehaviour(m_followPathBehaviour);
+		//	m_path->Clear();
+		//}
+		//
+		//m_path->PushPathSegment(glm::vec2(mX, mY));
 	}
 
 	if (GetBehaviour() != m_keyboardBehaviour && input->getPressedKeys().empty() == false)
@@ -89,5 +138,19 @@ void Player::Update(float deltaTime)
 void Player::Draw(aie::Renderer2D *renderer)
 {
 	// todo: player rendering logic stuff
+
+	// temp rendering for start and end node
+	if (m_startNode != nullptr) renderer->drawCircle(m_startNode->data.x, m_startNode->data.y, 4);
+	if (m_endNode != nullptr) renderer->drawCircle(m_endNode->data.x, m_endNode->data.y, 4);
 	GameObject::Draw(renderer);
+}
+
+void Player::SetGraph(Graph2D *graph)
+{
+	m_graph = graph;
+}
+
+Graph2D *Player::GetGraph()
+{
+	return m_graph;
 }

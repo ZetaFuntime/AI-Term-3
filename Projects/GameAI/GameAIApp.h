@@ -7,6 +7,7 @@
 class GameObject;
 class Graph2D;
 class Graph2DRenderer;
+class Player;
 
 class GameAIApp : public aie::Application {
 public:
@@ -20,6 +21,10 @@ public:
 	virtual void update(float deltaTime);
 	virtual void draw();
 
+	void SetupGraph();
+	void UpdateGraph(float deltaTime);
+	void DrawGraph();
+
 protected:
 
 	aie::Renderer2D*	m_2dRenderer;
@@ -28,7 +33,7 @@ protected:
 	glm::vec2			m_mousePos;
 	float				m_graphToMouseDistance;
 
-	GameObject *m_player = nullptr;
+	Player *m_player = nullptr;
 
 	Graph2D *m_graph;
 	Graph2DRenderer *m_graphRenderer;
