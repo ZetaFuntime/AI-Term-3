@@ -36,7 +36,7 @@ Player::Player() : GameObject()
 
 	SetBehaviour(new KeyboardBehaviour());
 
-	SetFriction(0.25f);
+	SetFriction(1.0f);
 }
 
 Player::~Player()

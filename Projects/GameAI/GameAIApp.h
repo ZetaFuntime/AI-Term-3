@@ -2,8 +2,11 @@
 
 #include "Application.h"
 #include "Renderer2D.h"
+#include <glm\vec2.hpp>
 
 class GameObject;
+class Graph2D;
+class Graph2DRenderer;
 
 class GameAIApp : public aie::Application {
 public:
@@ -22,5 +25,11 @@ protected:
 	aie::Renderer2D*	m_2dRenderer;
 	aie::Font*			m_font;
 
+	glm::vec2			m_mousePos;
+	float				m_graphToMouseDistance;
+
 	GameObject *m_player = nullptr;
+
+	Graph2D *m_graph;
+	Graph2DRenderer *m_graphRenderer;
 };
