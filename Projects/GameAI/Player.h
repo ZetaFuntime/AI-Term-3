@@ -22,7 +22,11 @@ public:
 	void SetGraph(Graph2D *graph);
 	Graph2D *GetGraph();
 
+	void DoPathLogic();
+
 protected:
+
+	int mX, mY;
 
 	KeyboardBehaviour *m_keyboardBehaviour;
 	SeekBehaviour *m_seekBehaviour;

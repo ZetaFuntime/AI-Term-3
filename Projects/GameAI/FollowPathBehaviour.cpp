@@ -34,6 +34,8 @@ void FollowPathBehaviour::Update(GameObject *object, float deltaTime)
 			if (glm::length(point - object->GetPosition()) < 20)
 			{
 				(m_patrolBack) ? m_currentPathNodeIndex -= 1 : m_currentPathNodeIndex += 1;
+				if (m_currentPathNodeIndex == path.size() && m_patrolMode)
+					m_currentPathNodeIndex -= 1;
 			}
 		}
 		if (m_currentPathNodeIndex == path.size() - 1)
@@ -46,6 +48,7 @@ void FollowPathBehaviour::Update(GameObject *object, float deltaTime)
 		point = path[m_currentPathNodeIndex];
 		if (!m_patrolMode && m_currentPathNodeIndex == path.size() - 1)
 			m_pathComplete = true;
+
 		// seek toward the point
 		glm::vec2 dirToPoint = glm::normalize(point - object->GetPosition());
 		object->ApplyForce(dirToPoint * m_forceStrength);
