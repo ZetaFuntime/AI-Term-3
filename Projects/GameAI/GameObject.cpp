@@ -91,7 +91,6 @@ void GameObject::SetBehaviour(Behaviour *behaviour)
 ColourPalette GameObject::paletteSwitch()
 {
 	float colourChange = m_velocity.x + m_velocity.y;
-	std::cout << colourChange << std::endl;
 	ColourPalette newColour = (colourChange < 100.f && colourChange > -100.f) ? GREEN : 
 							  (colourChange < 200.f && colourChange > -200.f) ? YELLOW : 
 							  (colourChange < 300.f && colourChange > -300.f) ? ORANGE : RED;

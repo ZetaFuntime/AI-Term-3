@@ -3,12 +3,16 @@
 #include "Path.h"
 #include "GameObject.h"
 #include <glm\glm.hpp>
+#include <iostream>
 
 FollowPathBehaviour::FollowPathBehaviour() : 
 	Behaviour(), m_path(nullptr), 
 	m_currentPathNodeIndex(0), 
 	m_forceStrength(100), 
-	m_nodeRadius(10.f)
+	m_nodeRadius(10.f),
+	m_patrolBack(false),
+	m_patrolMode(false),
+	m_pathComplete(false)
 {
 
 }
@@ -23,21 +27,31 @@ void FollowPathBehaviour::Update(GameObject *object, float deltaTime)
 	auto & path = m_path->GetPath();
 	if (path.empty() == false)
 	{
-		m_currentPathNodeIndex = m_currentPathNodeIndex % path.size();
+		if (!m_patrolBack)
+			m_currentPathNodeIndex = m_currentPathNodeIndex % path.size();
 		glm::vec2 point = path[m_currentPathNodeIndex];
-		if (glm::length(point - object->GetPosition()) < 20)
-		{
-			m_currentPathNodeIndex += 1;
+		if (!m_pathComplete) {
+			if (glm::length(point - object->GetPosition()) < 20)
+			{
+				(m_patrolBack) ? m_currentPathNodeIndex -= 1 : m_currentPathNodeIndex += 1;
+			}
 		}
-
-		m_currentPathNodeIndex = m_currentPathNodeIndex % path.size();
+		if (m_currentPathNodeIndex == path.size() - 1)
+			m_patrolBack = true;
+		if ((m_currentPathNodeIndex == 0 && m_patrolBack) || !m_patrolMode)
+			m_patrolBack = false;
+		if (!m_patrolBack) {
+			m_currentPathNodeIndex = m_currentPathNodeIndex % path.size();
+		}
 		point = path[m_currentPathNodeIndex];
-
+		if (!m_patrolMode && m_currentPathNodeIndex == path.size() - 1)
+			m_pathComplete = true;
 		// seek toward the point
 		glm::vec2 dirToPoint = glm::normalize(point - object->GetPosition());
 		object->ApplyForce(dirToPoint * m_forceStrength);
 
-
+		// For debugging on console
+		std::cout << m_currentPathNodeIndex << std::endl;
 	}
 }
 
@@ -96,4 +110,21 @@ void FollowPathBehaviour::SetNodeRadius(float radius)
 float FollowPathBehaviour::GetNodeRadius()
 {
 	return m_nodeRadius;
+}
+
+void FollowPathBehaviour::SetPatrolMode(bool activity)
+{
+	m_patrolMode = activity;
+	if (m_patrolMode)
+		m_pathComplete = false;
+}
+
+bool FollowPathBehaviour::GetPatrolActivity()
+{
+	return m_patrolMode;
+}
+
+bool FollowPathBehaviour::CheckPathComplete()
+{
+	return m_pathComplete;
 }

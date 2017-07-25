@@ -21,11 +21,21 @@ public:
 	void SetNodeRadius(float radius);
 	float GetNodeRadius();
 
+	void SetPatrolMode(bool activity);
+	bool GetPatrolActivity();
+
+	bool CheckPathComplete();
+
 protected:
 
 	int m_currentPathNodeIndex;
 	Path *m_path;
 	float m_forceStrength;
 	float m_nodeRadius;
+	bool m_patrolBack;
+	bool m_patrolMode;
+	bool m_pathComplete;
+
 private:
+
 };
