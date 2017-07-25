@@ -24,8 +24,6 @@ bool GameAIApp::startup() {
 	
 	m_2dRenderer = new aie::Renderer2D();
 	m_font = new aie::Font("./font/consolas.ttf", 32);
-
-	
 	
 	m_graph = new Graph2D();
 	m_graphRenderer = new Graph2DRenderer();
@@ -36,9 +34,6 @@ bool GameAIApp::startup() {
 	m_player = new Player();
 	m_player->SetPosition(glm::vec2(getWindowWidth()*0.5f, getWindowHeight()*0.5f));
 	m_player->SetGraph(m_graph);
-
-
-
 
 	return true;
 }
