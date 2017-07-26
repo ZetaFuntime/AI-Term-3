@@ -31,6 +31,8 @@ public:
 	void OnOuterRadiusEnter(std::function< void() > func);
 	void OnOuterRadiusExit(std::function< void() > func);
 
+	void SetActivity(bool amIActive);
+
 protected:
 	
 	glm::vec2 m_targetPosition;

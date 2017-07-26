@@ -106,6 +106,11 @@ void Player::Update(float deltaTime)
 			m_followPathBehaviour->SetPatrolMode(false);
 		}
 	}
+	else if (GetBehaviour() != m_followPathBehaviour)
+	{
+		m_startNode = nullptr;
+		m_endNode = nullptr;
+	}
 
 	else if (GetBehaviour() != m_keyboardBehaviour && input->wasKeyPressed(aie::INPUT_KEY_BACKSPACE))
 	{
@@ -150,6 +155,11 @@ void Player::Draw(aie::Renderer2D *renderer)
 	}
 
 	GameObject::Draw(renderer);
+}
+
+void Player::CheckActivity()
+{
+
 }
 
 void Player::SetGraph(Graph2D *graph)

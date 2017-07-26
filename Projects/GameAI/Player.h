@@ -27,6 +27,7 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void Draw(aie::Renderer2D *renderer);
 
+	void CheckActivity();
 	void SetGraph(Graph2D *graph);
 	Graph2D *GetGraph();
 

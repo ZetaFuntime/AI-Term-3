@@ -42,12 +42,14 @@ void SeekBehaviour::Update(GameObject *object, float deltaTime)
 
 void SeekBehaviour::Draw(GameObject * object, aie::Renderer2D *renderer)
 {
-	renderer->drawBox(m_targetPosition.x, m_targetPosition.y,10.f,10.f);
-	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.5f);
-	renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_innerRadius);
-	renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_outerRadius);
+	if (IsActive()) {
+		renderer->drawBox(m_targetPosition.x, m_targetPosition.y, 10.f, 10.f);
+		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.5f);
+		renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_innerRadius);
+		renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_outerRadius);
 
-	renderer->setRenderColour(1.0f,1.0f,1.0f,1.0f);
+		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 1.0f);
+	}
 }
 
 const glm::vec2 &SeekBehaviour::GetTarget()
@@ -109,3 +111,9 @@ void SeekBehaviour::OnOuterRadiusExit(std::function< void() > func)
 {
 	m_onOuterRadiusExit = func;
 }
+
+void SeekBehaviour::SetActivity(bool amIActive)
+{
+	IsActive(amIActive);
+}
+
