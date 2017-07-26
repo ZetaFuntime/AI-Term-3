@@ -3,6 +3,7 @@
 #include "SeekBehaviour.h"
 #include "Path.h"
 #include "FollowPathBehaviour.h"
+#include "WanderBehaviour.h"
 
 #include <Input.h>
 #include <Renderer2D.h>
@@ -34,7 +35,7 @@ Player::Player() : GameObject()
 	m_fleeBehaviour->SetInnerRadius(20);
 	m_fleeBehaviour->SetOuterRadius(100);
 	m_fleeBehaviour->OnOuterRadiusExit([this]() {
-	 SetBehaviour(m_keyboardBehaviour);
+		 SetBehaviour(m_keyboardBehaviour);
 	});
 
 	m_path = new Path();
@@ -42,6 +43,9 @@ Player::Player() : GameObject()
 	m_followPathBehaviour = new FollowPathBehaviour();
 	m_followPathBehaviour->IsOwnedByGameObject(false);
 	m_followPathBehaviour->SetPath(m_path);
+
+	m_wanderBehaviour = new WanderBehaviour();
+	m_wanderBehaviour->IsOwnedByGameObject(false);
 
 	SetBehaviour(new KeyboardBehaviour());
 
@@ -57,6 +61,7 @@ Player::~Player()
 	delete m_fleeBehaviour;
 	delete m_seekBehaviour;
 	delete m_keyboardBehaviour;
+	delete m_wanderBehaviour;
 }
 
 void Player::Update(float deltaTime)
@@ -80,6 +85,11 @@ void Player::Update(float deltaTime)
 	else if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_MIDDLE))
 	{
 		DoPathLogic();
+	}
+
+	else if (input->wasKeyPressed(aie::INPUT_KEY_T))
+	{
+		SetBehaviour( m_wanderBehaviour );
 	}
 
 	else if (GetBehaviour() == m_followPathBehaviour && input->wasKeyPressed(aie::INPUT_KEY_TAB))
