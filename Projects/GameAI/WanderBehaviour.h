@@ -1,5 +1,6 @@
 #pragma once
 #include "Behaviour.h"
+#include <glm\vec2.hpp>
 
 class WanderBehaviour : public Behaviour
 {
@@ -10,12 +11,18 @@ public:
 
 	virtual void Update(GameObject *object, float deltaTime);
 
+	glm::vec2 SetAngle(int strength, float wanderAngle);
+
 protected:
 
-	float m_timePassed;
+	float m_changetimePassed;
+	float m_applytimePassed;
 	float m_timeThreshold;
-	int m_xForce;
-	int m_yForce;
+	float m_changeThreshold;
+
+	glm::vec2 m_wanderVector;
+	float m_wanderAngle;
+	int m_appliedForce;
 
 private:
 };

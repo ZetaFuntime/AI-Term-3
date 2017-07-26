@@ -31,10 +31,12 @@ bool GameAIApp::startup() {
 
 	SetupGraph();
 
-	m_player = new Player();
-	m_player->SetPosition(glm::vec2(getWindowWidth()*0.5f, getWindowHeight()*0.5f));
-	m_player->SetGraph(m_graph);
-
+	for (int i = 0; i < 20; i++) {
+		m_player = new Player();
+		m_player->SetPosition(glm::vec2(getWindowWidth()*0.5f, getWindowHeight()*0.5f));
+		m_player->SetGraph(m_graph);
+		m_Agents.push_back(m_player);
+	}
 	return true;
 }
 
@@ -42,7 +44,12 @@ void GameAIApp::shutdown() {
 
 	delete m_graphRenderer;
 	delete m_graph;
-	delete m_player;
+
+	for (auto iter = m_Agents.begin(); iter != m_Agents.end(); iter++)
+	{
+		delete (*iter);
+	}
+	//delete m_player;
 	delete m_font;
 	delete m_2dRenderer;
 }
@@ -61,16 +68,35 @@ void GameAIApp::update(float deltaTime) {
 
 	m_graphRenderer->Update(deltaTime);
 	
-	m_player->Update(deltaTime);
+	for (auto iter = m_Agents.begin(); iter != m_Agents.end(); iter++)
+	{
+		(*iter)->Update(deltaTime);
+	}
+	//m_player->Update(deltaTime);
 
 	UpdateGraph(deltaTime);
+
 	// wrap the player around the screen
 	// ---------------------------------
-	const glm::vec2 &playerPos = m_player->GetPosition();
-	if (playerPos.x < 0) m_player->SetPosition(glm::vec2(getWindowWidth(), playerPos.y));
-	if (playerPos.x > getWindowWidth()) m_player->SetPosition(glm::vec2(0, playerPos.y));
-	if (playerPos.y < 0) m_player->SetPosition(glm::vec2(playerPos.x, getWindowHeight()));
-	if (playerPos.y > getWindowHeight()) m_player->SetPosition(glm::vec2(playerPos.x, 0));
+	for (auto iter = m_Agents.begin(); iter != m_Agents.end(); iter++)
+	{
+		//---------------------------Original code for a single Agent--------------------------
+		//const glm::vec2 &playerPos = m_player->GetPosition();
+
+		//-----------------Original code for wrapping the agents around the screen-------------
+		//const glm::vec2 &agentPos = (*iter)->GetPosition();
+		//if (agentPos.x < 0) (*iter)->SetPosition(glm::vec2(getWindowWidth(), agentPos.y));
+		//if (agentPos.x > getWindowWidth()) (*iter)->SetPosition(glm::vec2(0, agentPos.y));
+		//if (agentPos.y < 0) (*iter)->SetPosition(glm::vec2(agentPos.x, getWindowHeight()));
+		//if (agentPos.y > getWindowHeight()) (*iter)->SetPosition(glm::vec2(agentPos.x, 0));
+
+		//-------------------------Original code for bouncing off edges------------------------
+		const glm::vec2 &agentPos = (*iter)->GetPosition();
+		if (agentPos.x < 0) (*iter)->ApplyForce(glm::vec2(10000,0));
+		if (agentPos.x > getWindowWidth()) (*iter)->ApplyForce(glm::vec2(-10000, 0));
+		if (agentPos.y < 0) (*iter)->ApplyForce(glm::vec2(0, 10000));
+		if (agentPos.y > getWindowHeight()) (*iter)->ApplyForce(glm::vec2(0, -10000));
+	}
 	// ---------------------------------
 }
 
@@ -84,7 +110,11 @@ void GameAIApp::draw() {
 
 	DrawGraph();
 
-	m_player->Draw(m_2dRenderer);
+	for (auto iter = m_Agents.begin(); iter != m_Agents.end(); iter++)
+	{
+		(*iter)->Draw(m_2dRenderer);
+	}
+	//m_player->Draw(m_2dRenderer);
 
 	// output some text, uses the last used colour
 	m_2dRenderer->drawText(m_font, "Press ESC to quit", 0, 0);

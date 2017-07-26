@@ -5,8 +5,11 @@
 #include "FollowPathBehaviour.h"
 #include "WanderBehaviour.h"
 
+#include <glm\glm.hpp>
 #include <Input.h>
 #include <Renderer2D.h>
+#include <math.h>
+#include <iostream>
 
 #include "Graph2D.h"
 #include "Pathfinder.h"
@@ -50,6 +53,9 @@ Player::Player() : GameObject()
 	SetBehaviour(new KeyboardBehaviour());
 
 	SetFriction(1.0f);
+
+	prevLocation = GetPosition();
+	m_effectLength = 8.0f;
 }
 
 Player::~Player()
@@ -105,8 +111,27 @@ void Player::Update(float deltaTime)
 	{
 		SetBehaviour(m_keyboardBehaviour);
 	}
-
+	
 	GameObject::Update(deltaTime);
+
+	float dist = glm::length(GetPosition() - prevLocation);
+	if (dist > m_effectLength)
+	{
+		// Record the latest point
+		Pos prevPoint;
+		prevPoint.data = GetPosition();
+
+		glm::vec2 targetHeading = prevPoint.data + GetVelocity();
+		prevPoint.rotation = atan2f(targetHeading.y - prevPoint.data.y,
+			targetHeading.x - prevPoint.data.x);
+		m_prevPoints.push_back(prevPoint);
+
+		if (m_prevPoints.size() > 50)
+			m_prevPoints.pop_front();
+
+		// Update previous position
+		prevLocation = GetPosition();
+	}
 }
 
 void Player::Draw(aie::Renderer2D *renderer)
@@ -116,6 +141,14 @@ void Player::Draw(aie::Renderer2D *renderer)
 	// temp rendering for start and end node
 	if (m_startNode != nullptr) renderer->drawCircle(m_startNode->data.x, m_startNode->data.y, 4);
 	if (m_endNode != nullptr) renderer->drawCircle(m_endNode->data.x, m_endNode->data.y, 4);
+
+	// Draw path that has been travelled
+	for (auto iter = m_prevPoints.begin(); iter != m_prevPoints.end(); iter++)
+	{
+		renderer->setRenderColour(0xFFFFFFFF);
+		renderer->drawBox(iter->data.x, iter->data.y, 4.f, 1.f, iter->rotation);
+	}
+
 	GameObject::Draw(renderer);
 }
 

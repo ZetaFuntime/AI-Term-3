@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "Graph2D.h"
+#include <list>
 
 class KeyboardBehaviour;
 class SeekBehaviour;
@@ -11,6 +12,12 @@ class Path;
 class Graph2D;
 class Pathfinder;
 
+struct Pos
+{
+	glm::vec2 data;
+	float rotation;
+	float timer;
+};
 class Player : public GameObject
 {
 public:
@@ -28,7 +35,9 @@ public:
 protected:
 
 	int mX, mY;
-
+	float m_effectLength;
+	float m_trailDelay;
+	glm::vec2 prevLocation;
 	KeyboardBehaviour *m_keyboardBehaviour;
 	SeekBehaviour *m_seekBehaviour;
 	SeekBehaviour *m_fleeBehaviour;
@@ -36,11 +45,12 @@ protected:
 	WanderBehaviour *m_wanderBehaviour;
 
 	Path *m_path;
-
 	Graph2D *m_graph;
 	Graph2D::Node *m_startNode;
 	Graph2D::Node *m_endNode;
 	Pathfinder *m_pathfinder;
+
+	std::list<Pos> m_prevPoints;
 
 private:
 };

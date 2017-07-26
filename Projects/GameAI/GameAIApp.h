@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Renderer2D.h"
 #include <glm\vec2.hpp>
+#include <vector>
 
 class GameObject;
 class Graph2D;
@@ -33,6 +34,7 @@ protected:
 	glm::vec2			m_mousePos;
 	float				m_graphToMouseDistance;
 
+	std::vector<Player* > m_Agents;
 	Player *m_player = nullptr;
 
 	Graph2D *m_graph;
