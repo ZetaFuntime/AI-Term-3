@@ -76,73 +76,82 @@ void Player::Update(float deltaTime)
 	aie::Input *input = aie::Input::getInstance();
 	input->getMouseXY(&mX, &mY);
 
+	// --------------- Seek Behaviour Command ----------------------
+	// Agent will seek towards a given point from the user
+	// -------------------------------------------------------------
 	if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_LEFT))
 	{
 		m_seekBehaviour->SetTarget(glm::vec2(mX,mY));
 		SetBehaviour ( m_seekBehaviour);
 	}
 
+	// --------------- Flee Behaviour Command ----------------------
+	// Agent will flee from a given point from the user
+	// -------------------------------------------------------------
 	else if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_RIGHT))
 	{
 		m_fleeBehaviour->SetTarget(glm::vec2(mX,mY));
 		SetBehaviour( m_fleeBehaviour );
 	}
 
+	// --------------- Follow Behaviour Command --------------------
+	// Agent will follow a path designated by the user, from the
+	// start point to the end point.
+	// -------------------------------------------------------------
 	else if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_MIDDLE))
 	{
 		DoPathLogic();
 	}
 
-	else if (input->wasKeyPressed(aie::INPUT_KEY_T))
-	{
-		SetBehaviour( m_wanderBehaviour );
-	}
-
-	else if (GetBehaviour() == m_followPathBehaviour && input->wasKeyPressed(aie::INPUT_KEY_TAB))
-	{
-		if (!m_followPathBehaviour->GetPatrolActivity()) {
-			m_followPathBehaviour->SetPatrolMode(true);
-		} else {
-			m_followPathBehaviour->SetPatrolMode(false);
-		}
-	}
 	else if (GetBehaviour() != m_followPathBehaviour)
 	{
 		m_startNode = nullptr;
 		m_endNode = nullptr;
 	}
 
-	else if (GetBehaviour() != m_keyboardBehaviour && input->wasKeyPressed(aie::INPUT_KEY_BACKSPACE))
+	// --------------- Follow path - Patrol Mode toggle ------------
+	// Agent will follow a path designated by the user, between the
+	// start point and the end point.
+	// (Only available during follow path behaviour)
+	// -------------------------------------------------------------
+	if (GetBehaviour() == m_followPathBehaviour && input->wasKeyPressed(aie::INPUT_KEY_TAB))
+	{
+		if (!m_followPathBehaviour->GetPatrolActivity()) {
+			m_followPathBehaviour->SetPatrolMode(true);
+		}
+		else {
+			m_followPathBehaviour->SetPatrolMode(false);
+		}
+	}
+
+	// --------------- Wander Behaviour Command --------------------
+	// Agents will automatically move forward with a random force
+	// with the direction being adjusted at random intervals with
+	// random amounts.
+	// -------------------------------------------------------------
+	else if (input->wasKeyPressed(aie::INPUT_KEY_T))
+	{
+		SetBehaviour( m_wanderBehaviour );
+	}
+
+	// -------------- Keyboard Behaviour Command -------------------
+	// Agents will follow direction given by WASD controls from
+	// the user.
+	// -------------------------------------------------------------
+	if (GetBehaviour() != m_keyboardBehaviour && input->wasKeyPressed(aie::INPUT_KEY_BACKSPACE))
 	{
 		SetBehaviour(m_keyboardBehaviour);
 	}
 	
+	// Update all gameobjects currently in use
 	GameObject::Update(deltaTime);
 
-	float dist = glm::length(GetPosition() - prevLocation);
-	if (dist > m_effectLength)
-	{
-		// Record the latest point
-		Pos prevPoint;
-		prevPoint.data = GetPosition();
-
-		glm::vec2 targetHeading = prevPoint.data + GetVelocity();
-		prevPoint.rotation = atan2f(targetHeading.y - prevPoint.data.y,
-			targetHeading.x - prevPoint.data.x);
-		m_prevPoints.push_back(prevPoint);
-
-		if (m_prevPoints.size() > 50)
-			m_prevPoints.pop_front();
-
-		// Update previous position
-		prevLocation = GetPosition();
-	}
+	// Update the trails left by player objects
+	DoTrailLogic();
 }
 
 void Player::Draw(aie::Renderer2D *renderer)
 {
-	// todo: player rendering logic stuff
-
 	// temp rendering for start and end node
 	if (m_startNode != nullptr) renderer->drawCircle(m_startNode->data.x, m_startNode->data.y, 4);
 	if (m_endNode != nullptr) renderer->drawCircle(m_endNode->data.x, m_endNode->data.y, 4);
@@ -154,6 +163,7 @@ void Player::Draw(aie::Renderer2D *renderer)
 		renderer->drawBox(iter->data.x, iter->data.y, 4.f, 1.f, iter->rotation);
 	}
 
+	// Draw all gameobjects currently in use
 	GameObject::Draw(renderer);
 }
 
@@ -224,4 +234,26 @@ void Player::DoPathLogic()
 		m_path->Clear();
 	}
 	//m_path->PushPathSegment(glm::vec2(mX, mY));
+}
+
+void Player::DoTrailLogic()
+{
+	float dist = glm::length(GetPosition() - prevLocation);
+	if (dist > m_effectLength)
+	{
+		// Record the latest point
+		Pos prevPoint;
+		prevPoint.data = GetPosition();
+
+		glm::vec2 targetHeading = prevPoint.data + GetVelocity();
+		prevPoint.rotation = atan2f(targetHeading.y - prevPoint.data.y,
+			targetHeading.x - prevPoint.data.x);
+		m_prevPoints.push_back(prevPoint);
+
+		if (m_prevPoints.size() > 50)
+			m_prevPoints.pop_front();
+
+		// Update previous position
+		prevLocation = GetPosition();
+	}
 }

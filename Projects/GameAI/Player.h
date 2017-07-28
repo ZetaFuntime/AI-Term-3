@@ -33,6 +33,8 @@ public:
 
 	void DoPathLogic();
 
+	void DoTrailLogic();
+
 protected:
 
 	int mX, mY;

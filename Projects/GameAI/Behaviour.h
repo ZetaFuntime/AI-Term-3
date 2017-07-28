@@ -19,13 +19,9 @@ public:
 	bool IsOwnedByGameObject() { return m_isOwned; }
 	void IsOwnedByGameObject(bool isOwned) { m_isOwned = isOwned; }
 
-	bool IsActive() { return m_isActive; }
-	void IsActive(bool amIactive) { m_isActive = amIactive; }
-
 protected:
 
 	bool m_isOwned;
-	bool m_isActive;
 
 private:
 };

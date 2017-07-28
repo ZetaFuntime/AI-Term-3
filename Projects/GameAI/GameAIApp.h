@@ -24,6 +24,7 @@ public:
 
 	void SetupGraph();
 	void UpdateGraph(float deltaTime);
+	void AddAgent();
 	void DrawGraph();
 
 protected:
