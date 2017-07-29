@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include <Renderer2D.h>
 #include "Behaviour.h"
+#include <glm\glm.hpp>
 #include <iostream>
 
 GameObject::GameObject() : m_friction (1.0f), m_behaviour(nullptr)
@@ -72,7 +73,7 @@ void GameObject::SetPosition(const glm::vec2 &pos)
 
 void GameObject::SetVelocity(const glm::vec2 &vel)
 {
-	m_velocity += vel;
+	m_velocity = vel;
 }
 
 void GameObject::SetFriction(float friction)

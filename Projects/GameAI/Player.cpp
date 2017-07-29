@@ -4,6 +4,7 @@
 #include "Path.h"
 #include "FollowPathBehaviour.h"
 #include "WanderBehaviour.h"
+#include "ArrivalBehaviour.h"
 
 #include <glm\glm.hpp>
 #include <Input.h>
@@ -25,20 +26,22 @@ Player::Player() : GameObject()
 
 	m_seekBehaviour = new SeekBehaviour();
 	m_seekBehaviour->IsOwnedByGameObject(false);
-	m_seekBehaviour->SetForceStrength(100);
-	m_seekBehaviour->SetInnerRadius(20);
-	m_seekBehaviour->SetOuterRadius(100);
-	m_seekBehaviour->OnInnerRadiusEnter([this]() {
-		SetBehaviour(m_keyboardBehaviour);
+	m_seekBehaviour->OnOuterRadiusEnter([this]() {
+		m_arrivalBehaviour->SetTarget(m_seekBehaviour->GetTarget());
+		SetBehaviour(m_arrivalBehaviour);
 	});
 
 	m_fleeBehaviour = new SeekBehaviour();
 	m_fleeBehaviour->IsOwnedByGameObject(false);
 	m_fleeBehaviour->SetForceStrength(-100);
-	m_fleeBehaviour->SetInnerRadius(20);
-	m_fleeBehaviour->SetOuterRadius(100);
 	m_fleeBehaviour->OnOuterRadiusExit([this]() {
-		 SetBehaviour(m_keyboardBehaviour);
+		 SetBehaviour(m_wanderBehaviour);
+	});
+
+	m_arrivalBehaviour = new ArrivalBehaviour();
+	m_arrivalBehaviour->IsOwnedByGameObject(false);
+	m_arrivalBehaviour->OnTargetRadiusEnter([this]() {
+		SetBehaviour(m_keyboardBehaviour);
 	});
 
 	m_path = new Path();
@@ -167,11 +170,6 @@ void Player::Draw(aie::Renderer2D *renderer)
 	GameObject::Draw(renderer);
 }
 
-void Player::CheckActivity()
-{
-
-}
-
 void Player::SetGraph(Graph2D *graph)
 {
 	m_graph = graph;
@@ -248,8 +246,10 @@ void Player::DoTrailLogic()
 		glm::vec2 targetHeading = prevPoint.data + GetVelocity();
 		prevPoint.rotation = atan2f(targetHeading.y - prevPoint.data.y,
 			targetHeading.x - prevPoint.data.x);
+
 		m_prevPoints.push_back(prevPoint);
 
+		// If the trail gets too long, pop the last point
 		if (m_prevPoints.size() > 50)
 			m_prevPoints.pop_front();
 

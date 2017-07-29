@@ -3,7 +3,11 @@
 #include <Renderer2D.h>
 #include <glm\glm.hpp>
 
-SeekBehaviour::SeekBehaviour()
+SeekBehaviour::SeekBehaviour() : 
+	Behaviour(),
+	m_forceStrength(100),
+	m_innerRadius(20),
+	m_outerRadius(100)
 {
 
 }
@@ -20,7 +24,7 @@ void SeekBehaviour::Update(GameObject *object, float deltaTime)
 	// have we just entered the inner radius
 	if (m_onInnerRadiusEnter && lastDistanceToTarget > m_innerRadius && distanceToTarget <= m_innerRadius)
 		m_onInnerRadiusEnter();
-
+	 
 	// have we just exited the inner radius
 	if (m_onInnerRadiusExit && lastDistanceToTarget <= m_innerRadius && distanceToTarget > m_innerRadius)
 		m_onInnerRadiusExit();
@@ -33,7 +37,6 @@ void SeekBehaviour::Update(GameObject *object, float deltaTime)
 	if (m_onOuterRadiusExit && lastDistanceToTarget <= m_outerRadius && distanceToTarget > m_outerRadius)
 		m_onOuterRadiusExit();
 
-
 	glm::vec2 dirToTarget = glm::normalize(m_targetPosition - object->GetPosition()) * m_forceStrength;
 	object->ApplyForce(dirToTarget);
 
@@ -42,7 +45,6 @@ void SeekBehaviour::Update(GameObject *object, float deltaTime)
 
 void SeekBehaviour::Draw(GameObject * object, aie::Renderer2D *renderer)
 {
-
 	renderer->drawBox(m_targetPosition.x, m_targetPosition.y, 10.f, 10.f);
 
 	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.5f);

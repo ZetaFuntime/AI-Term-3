@@ -31,10 +31,8 @@ bool GameAIApp::startup() {
 
 	SetupGraph();
 
-	for (int i = 0; i < 20; i++)
-	{
-		AddAgent();
-	}
+	AddAgent();
+
 
 	return true;
 }
@@ -48,7 +46,7 @@ void GameAIApp::shutdown() {
 	{
 		delete (*iter);
 	}
-	//delete m_player;
+
 	delete m_font;
 	delete m_2dRenderer;
 }
@@ -80,18 +78,24 @@ void GameAIApp::update(float deltaTime) {
 	for (auto iter = m_Agents.begin(); iter != m_Agents.end(); iter++)
 	{
 		//-----------------Original code for wrapping the agents around the screen-------------
-		const glm::vec2 &agentPos = (*iter)->GetPosition();
-		if (agentPos.x < 0) (*iter)->SetPosition(glm::vec2(getWindowWidth(), agentPos.y));
-		if (agentPos.x > getWindowWidth()) (*iter)->SetPosition(glm::vec2(0, agentPos.y));
-		if (agentPos.y < 0) (*iter)->SetPosition(glm::vec2(agentPos.x, getWindowHeight()));
-		if (agentPos.y > getWindowHeight()) (*iter)->SetPosition(glm::vec2(agentPos.x, 0));
+		//const glm::vec2 &agentPos = (*iter)->GetPosition();
+		//if (agentPos.x < 0) (*iter)->SetPosition(glm::vec2(getWindowWidth(), agentPos.y));
+		//if (agentPos.x > getWindowWidth()) (*iter)->SetPosition(glm::vec2(0, agentPos.y));
+		//if (agentPos.y < 0) (*iter)->SetPosition(glm::vec2(agentPos.x, getWindowHeight()));
+		//if (agentPos.y > getWindowHeight()) (*iter)->SetPosition(glm::vec2(agentPos.x, 0));
 
 		//-------------------------Original code for bouncing off edges------------------------
+		const glm::vec2 &agentPos = (*iter)->GetPosition();
+		if (agentPos.x < 0) (*iter)->ApplyForce(glm::vec2(10000,0));
+		if (agentPos.x > getWindowWidth()) (*iter)->ApplyForce(glm::vec2(-10000, 0));
+		if (agentPos.y < 0) (*iter)->ApplyForce(glm::vec2(0, 10000));
+		if (agentPos.y > getWindowHeight()) (*iter)->ApplyForce(glm::vec2(0, -10000));
+
+		//------------------Original code for bouncing off edges with correct velocity---------
+		//const glm::vec2 &agentVel = (*iter)->GetVelocity();
 		//const glm::vec2 &agentPos = (*iter)->GetPosition();
-		//if (agentPos.x < 0) (*iter)->ApplyForce(glm::vec2(10000,0));
-		//if (agentPos.x > getWindowWidth()) (*iter)->ApplyForce(glm::vec2(-10000, 0));
-		//if (agentPos.y < 0) (*iter)->ApplyForce(glm::vec2(0, 10000));
-		//if (agentPos.y > getWindowHeight()) (*iter)->ApplyForce(glm::vec2(0, -10000));
+		//if (agentPos.x < 0 || agentPos.x > getWindowWidth()) (*iter)->ApplyForce(glm::vec2(-(agentVel.x*2),0));
+		//if (agentPos.y < 0 || agentPos.y > getWindowHeight()) (*iter)->ApplyForce(glm::vec2(0, -agentVel.y*2));
 	}
 }
 

@@ -8,6 +8,7 @@ class KeyboardBehaviour;
 class SeekBehaviour;
 class FollowPathBehaviour;
 class WanderBehaviour;
+class ArrivalBehaviour;
 class Path;
 class Graph2D;
 class Pathfinder;
@@ -46,6 +47,7 @@ protected:
 	SeekBehaviour *m_fleeBehaviour;
 	FollowPathBehaviour *m_followPathBehaviour;
 	WanderBehaviour *m_wanderBehaviour;
+	ArrivalBehaviour *m_arrivalBehaviour;
 
 	Path *m_path;
 	Graph2D *m_graph;

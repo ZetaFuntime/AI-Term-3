@@ -2,10 +2,12 @@
 #include "GameObject.h"
 #include <Renderer2D.h>
 #include <glm\glm.hpp>
+#include <iostream>
 
 ArrivalBehaviour::ArrivalBehaviour() : 
 	Behaviour(),
-	m_slowingRadius(50.f)
+	m_slowingRadius(100.f),
+	m_targetRadius(5.f)
 {
 
 }
@@ -16,12 +18,48 @@ ArrivalBehaviour::~ArrivalBehaviour()
 
 void ArrivalBehaviour::Update(GameObject *object, float deltaTime)
 {
-	object->GetVelocity();
+	float lastDistanceToTarget = glm::length(m_targetPosition - m_lastPosition);
+	float distanceToTarget = glm::length(m_targetPosition - object->GetPosition());
+
+	// Have we just entered the target radius
+	if (m_onTargetRadiusEnter && lastDistanceToTarget > m_targetRadius && distanceToTarget <= m_targetRadius)
+		m_onTargetRadiusEnter();
+		
+	// --------------------------------------------------------------
+	// If the agent is outside the slowing radius, don't slow it down
+	// --------------------------------------------------------------
+	float slowRatio = (distanceToTarget < m_slowingRadius)? (distanceToTarget / (m_slowingRadius - 20.f)) : 1;
+
+	// --------------------------------------------------------------
+	// Apply a constant force to the agent which is scaled down as the
+	//			  agent gets closer to the destination.
+	// --------------------------------------------------------------
+	glm::vec2 dirToTarget = glm::normalize(m_targetPosition - object->GetPosition()) * slowRatio;
+	object->ApplyForce(dirToTarget);
+
+	m_lastPosition = object->GetPosition();
+
+	std::cout << m_forceStrength * slowRatio << std::endl;
 }
 
 void ArrivalBehaviour::Draw(GameObject *object, aie::Renderer2D *renderer)
 {
+	renderer->drawBox(m_targetPosition.x, m_targetPosition.y, 10.f, 10.f);
 
+	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.1f);
+	renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_slowingRadius);
+
+	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+const glm::vec2 &ArrivalBehaviour::GetTarget()
+{
+	return m_targetPosition;
+}
+
+void ArrivalBehaviour::SetTarget(const glm::vec2 &target)
+{
+	m_targetPosition = target;
 }
 
 float ArrivalBehaviour::GetSlowingRadius()
@@ -32,4 +70,9 @@ float ArrivalBehaviour::GetSlowingRadius()
 void ArrivalBehaviour::SetSlowingRadius(float radius)
 {
 	m_slowingRadius = radius;
+}
+
+void ArrivalBehaviour::OnTargetRadiusEnter(std::function< void() > func)
+{
+	m_onTargetRadiusEnter = func;
 }
