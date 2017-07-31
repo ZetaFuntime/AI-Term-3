@@ -258,3 +258,32 @@ void Player::DoTrailLogic()
 		prevLocation = GetPosition();
 	}
 }
+
+void Player::Flock(Player * allAgents, unsigned int numAgents, float neighbourRadius, float seperationRadius, float seperationWeight, float alignmentWeight, float coherenceWeight)
+{
+	std::vector<Player *> neighbours;
+	for (unsigned int i = 0; i < numAgents; i++)
+	{
+		float distance = glm::length(allAgents[i])
+	}
+}
+
+glm::vec2 Player::Seperation(std::vector<Player*>& neighbours, float seperationRadius)
+{
+	return glm::vec2();
+}
+
+glm::vec2 Player::Alignment(std::vector<Player*>& neighbours)
+{
+	return glm::vec2();
+}
+
+glm::vec2 Player::Coherence(std::vector<Player*>& neighbours)
+{
+	return glm::vec2();
+}
+
+glm::vec2 Player::SteerTo(glm::vec2 target)
+{
+	return glm::vec2();
+}

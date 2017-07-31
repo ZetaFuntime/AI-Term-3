@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameAI", "Projects\GameAI\G
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Boids", "Projects\Boids\Boids.vcxproj", "{9C81F013-DFC3-4432-AD3F-DC6626206749}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AIProject", "AIProject\AIProject.vcxproj", "{F932238E-0F48-4EEB-A068-BE415D2CDDE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -45,6 +47,10 @@ Global
 		{9C81F013-DFC3-4432-AD3F-DC6626206749}.Debug|x86.Build.0 = Debug|Win32
 		{9C81F013-DFC3-4432-AD3F-DC6626206749}.Release|x86.ActiveCfg = Release|Win32
 		{9C81F013-DFC3-4432-AD3F-DC6626206749}.Release|x86.Build.0 = Release|Win32
+		{F932238E-0F48-4EEB-A068-BE415D2CDDE4}.Debug|x86.ActiveCfg = Debug|Win32
+		{F932238E-0F48-4EEB-A068-BE415D2CDDE4}.Debug|x86.Build.0 = Debug|Win32
+		{F932238E-0F48-4EEB-A068-BE415D2CDDE4}.Release|x86.ActiveCfg = Release|Win32
+		{F932238E-0F48-4EEB-A068-BE415D2CDDE4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

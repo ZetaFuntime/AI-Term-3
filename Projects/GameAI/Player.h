@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "Graph2D.h"
+#include <glm\glm.hpp>
 #include <Texture.h>
 #include <list>
 
@@ -36,6 +37,21 @@ public:
 
 	void DoTrailLogic();
 
+	// Flock Behaviour functions
+	void Flock(Player *allAgents, unsigned int numAgents,
+		float neighbourRadius, float seperationRadius,
+		float seperationWeight, float alignmentWeight,
+		float coherenceWeight);
+
+// Flock Behaviour variables
+protected:
+
+	glm::vec2 Seperation(std::vector<Player *> &neighbours, float seperationRadius);
+	glm::vec2 Alignment(std::vector<Player *> &neighbours);
+	glm::vec2 Coherence(std::vector<Player *> &neighbours);
+
+	glm::vec2 SteerTo(glm::vec2 target);
+
 protected:
 
 	int mX, mY;
@@ -57,6 +73,5 @@ protected:
 	Pathfinder*			m_pathfinder;
 
 	std::list<Pos> m_prevPoints;
-
 private:
 };
