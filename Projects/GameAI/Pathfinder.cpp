@@ -71,7 +71,7 @@ void Pathfinder::UpdateSearch()
 			return;
 		}
 		auto edges = node->node->connections;
-		for (int i = 0; i < edges.size(); i++)
+		for (unsigned int i = 0; i < edges.size(); i++)
 		{
 			Graph2D::Edge& edge = edges[i];
 			Graph2D::Node *child = edge.to;

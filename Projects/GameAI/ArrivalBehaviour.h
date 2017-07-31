@@ -27,6 +27,7 @@ protected:
 	glm::vec2 m_targetPosition;
 	float m_slowingRadius;
 	float m_targetRadius;
+	float m_forceStrength;
 
 	std::function< void() > m_onTargetRadiusEnter;
 

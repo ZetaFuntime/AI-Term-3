@@ -4,7 +4,10 @@
 #include <glm\glm.hpp>
 #include <iostream>
 
-GameObject::GameObject() : m_friction (1.0f), m_behaviour(nullptr)
+GameObject::GameObject() : 
+	m_friction (1.0f), 
+	m_behaviour(nullptr),
+	m_colour(WHITE)
 {
 
 }
@@ -24,7 +27,10 @@ void GameObject::Update(float deltaTime)
 void GameObject::Draw(aie::Renderer2D * renderer)
 {
 	glm::vec2 targetHeading = m_position + m_velocity;
+
+	renderer->setRenderColour(m_colour);
 	renderer->drawCircle(m_position.x, m_position.y, 8);
+
 	renderer->setRenderColour(paletteSwitch());
 	renderer->drawLine(m_position.x, m_position.y, targetHeading.x, targetHeading.y, 2.0f);
 	renderer->setRenderColour(0xFFFFFFFF);
@@ -96,4 +102,18 @@ ColourPalette GameObject::paletteSwitch()
 							  (colourChange < 200.f && colourChange > -200.f) ? YELLOW : 
 							  (colourChange < 300.f && colourChange > -300.f) ? ORANGE : RED;
 	return newColour;
+}
+
+void GameObject::SetColour(int id)
+{
+	switch (id)
+	{
+	case GREEN:		m_colour = GREEN;	break;		
+	case RED:		m_colour = RED;		break;
+	case YELLOW:	m_colour = YELLOW;	break;
+	case ORANGE:	m_colour = ORANGE;	break;
+	case WHITE:		m_colour = WHITE;	break;
+	default:		m_colour = WHITE;	break;
+
+	}
 }

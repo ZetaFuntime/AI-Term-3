@@ -7,7 +7,8 @@
 ArrivalBehaviour::ArrivalBehaviour() : 
 	Behaviour(),
 	m_slowingRadius(100.f),
-	m_targetRadius(5.f)
+	m_targetRadius(10.f),
+	m_forceStrength(100.f)
 {
 
 }
@@ -28,18 +29,17 @@ void ArrivalBehaviour::Update(GameObject *object, float deltaTime)
 	// --------------------------------------------------------------
 	// If the agent is outside the slowing radius, don't slow it down
 	// --------------------------------------------------------------
-	float slowRatio = (distanceToTarget < m_slowingRadius)? (distanceToTarget / (m_slowingRadius - 20.f)) : 1;
+	float slowRatio = (distanceToTarget < m_slowingRadius)? (distanceToTarget / (m_slowingRadius)) : 1;
 
 	// --------------------------------------------------------------
 	// Apply a constant force to the agent which is scaled down as the
 	//			  agent gets closer to the destination.
 	// --------------------------------------------------------------
-	glm::vec2 dirToTarget = glm::normalize(m_targetPosition - object->GetPosition()) * slowRatio;
-	object->ApplyForce(dirToTarget);
+	glm::vec2 currentDirToTarget = glm::normalize(m_targetPosition - object->GetPosition()) * slowRatio * m_forceStrength;
+
+	object->SetVelocity(currentDirToTarget);
 
 	m_lastPosition = object->GetPosition();
-
-	std::cout << m_forceStrength * slowRatio << std::endl;
 }
 
 void ArrivalBehaviour::Draw(GameObject *object, aie::Renderer2D *renderer)
@@ -48,7 +48,8 @@ void ArrivalBehaviour::Draw(GameObject *object, aie::Renderer2D *renderer)
 
 	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.1f);
 	renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_slowingRadius);
-
+	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.2f);
+	renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_targetRadius);
 	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 1.0f);
 }
 

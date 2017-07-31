@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "Graph2D.h"
+#include <Texture.h>
 #include <list>
 
 class KeyboardBehaviour;
@@ -28,7 +29,6 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void Draw(aie::Renderer2D *renderer);
 
-	void CheckActivity();
 	void SetGraph(Graph2D *graph);
 	Graph2D *GetGraph();
 
@@ -49,11 +49,12 @@ protected:
 	WanderBehaviour *m_wanderBehaviour;
 	ArrivalBehaviour *m_arrivalBehaviour;
 
-	Path *m_path;
-	Graph2D *m_graph;
-	Graph2D::Node *m_startNode;
-	Graph2D::Node *m_endNode;
-	Pathfinder *m_pathfinder;
+	aie::Texture*		m_Agent;
+	Path*				m_path;
+	Graph2D*			m_graph;
+	Graph2D::Node*		m_startNode;
+	Graph2D::Node*		m_endNode;
+	Pathfinder*			m_pathfinder;
 
 	std::list<Pos> m_prevPoints;
 

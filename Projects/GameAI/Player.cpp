@@ -9,6 +9,7 @@
 #include <glm\glm.hpp>
 #include <Input.h>
 #include <Renderer2D.h>
+#include <Texture.h>
 #include <math.h>
 #include <iostream>
 

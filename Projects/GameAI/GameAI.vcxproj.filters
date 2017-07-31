@@ -19,6 +19,12 @@
     <Filter Include="Header Files\Behaviours">
       <UniqueIdentifier>{4974f4b4-e129-471d-90e3-019f45084ce5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Base Class Headers">
+      <UniqueIdentifier>{f43b78bb-82da-4625-9843-2843a890fb7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Base Class Sources">
+      <UniqueIdentifier>{102abbc0-89b7-4506-a363-71b902640531}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameAIApp.cpp">
@@ -27,13 +33,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Path.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Graph2D.cpp">
@@ -60,24 +60,18 @@
     <ClCompile Include="ArrivalBehaviour.cpp">
       <Filter>Source Files\Behaviours</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\Base Class Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>Source Files\Base Class Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameAIApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Path.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graph.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graph2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Graph2DRenderer.h">
@@ -103,6 +97,18 @@
     </ClInclude>
     <ClInclude Include="ArrivalBehaviour.h">
       <Filter>Header Files\Behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\Base Class Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>Header Files\Base Class Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Header Files\Base Class Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph2D.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

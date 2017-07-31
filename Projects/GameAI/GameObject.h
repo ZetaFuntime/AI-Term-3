@@ -38,12 +38,16 @@ public:
 	void SetBehaviour(Behaviour *behaviour);
 	ColourPalette paletteSwitch();
 
+	void SetColour(int id);
+
 protected:
 
+	ColourPalette m_colour;
 	glm::vec2 m_position;
 	glm::vec2 m_velocity;
 	glm::vec2 m_acceleration;
 
+	float m_rotation;
 	float m_friction;
 
 	Behaviour *m_behaviour;
