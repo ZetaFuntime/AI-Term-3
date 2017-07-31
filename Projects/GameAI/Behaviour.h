@@ -1,6 +1,7 @@
 #pragma once
 
 class GameObject;
+
 namespace aie
 {
 	class Renderer2D;
