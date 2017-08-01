@@ -1,12 +1,17 @@
 #include "GameObject.h"
-#include <Renderer2D.h>
 #include "Behaviour.h"
+
+#include <Texture.h>
+#include <Renderer2D.h>
 #include <glm\glm.hpp>
 #include <iostream>
 
-GameObject::GameObject() :
+GameObject::GameObject(aie::Texture *tex) :
+	m_tex(tex),
 	m_friction(1.0f),
+	m_rotation(0.0f),
 	m_behaviour(nullptr),
+	isDrawn(true),
 	m_colour(WHITE)
 {
 
@@ -29,11 +34,17 @@ void GameObject::Draw(aie::Renderer2D * renderer)
 	glm::vec2 targetHeading = m_position + m_velocity;
 
 	renderer->setRenderColour(m_colour);
-	renderer->drawCircle(m_position.x, m_position.y, 8);
-
-	renderer->setRenderColour(paletteSwitch());
-	renderer->drawLine(m_position.x, m_position.y, targetHeading.x, targetHeading.y, 2.0f);
-	renderer->setRenderColour(0xFFFFFFFF);
+	if (m_tex != nullptr) {
+		renderer->drawCircle(m_position.x, m_position.y, 8);
+	} else {
+		renderer->drawSprite(m_tex, m_position.x, m_position.y, 0, 0, m_rotation);
+	}
+	if (!m_behaviour->IsDrawnByGameObject())
+	{
+		renderer->setRenderColour(WHITE);
+		renderer->drawLine(m_position.x, m_position.y, targetHeading.x, targetHeading.y, 2.0f);
+		renderer->setRenderColour(0xFFFFFFFF);
+	}
 	if (m_behaviour != nullptr)
 		m_behaviour->Draw(this, renderer);
 }
@@ -93,15 +104,6 @@ void GameObject::SetBehaviour(Behaviour *behaviour)
 		delete m_behaviour;
 
 	m_behaviour = behaviour;
-}
-
-ColourPalette GameObject::paletteSwitch()
-{
-	float colourChange = m_velocity.x + m_velocity.y;
-	ColourPalette newColour = (colourChange < 100.f && colourChange > -100.f) ? GREEN :
-		(colourChange < 200.f && colourChange > -200.f) ? YELLOW :
-		(colourChange < 300.f && colourChange > -300.f) ? ORANGE : RED;
-	return newColour;
 }
 
 void GameObject::SetColour(int id)

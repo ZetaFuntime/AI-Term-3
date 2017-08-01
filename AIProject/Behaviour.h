@@ -20,9 +20,13 @@ public:
 	bool IsOwnedByGameObject() { return m_isOwned; }
 	void IsOwnedByGameObject(bool isOwned) { m_isOwned = isOwned; }
 
+	bool IsDrawnByGameObject() { return m_isDrawn; }
+	void IsDrawnByGameObject(bool isDrawn) { m_isDrawn = isDrawn; }
+
 protected:
 
 	bool m_isOwned;
+	bool m_isDrawn;
 
 private:
 };

@@ -19,11 +19,11 @@
     <Filter Include="Header Files\Behaviours">
       <UniqueIdentifier>{4974f4b4-e129-471d-90e3-019f45084ce5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Base Class Headers">
-      <UniqueIdentifier>{f43b78bb-82da-4625-9843-2843a890fb7e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Base Class Sources">
       <UniqueIdentifier>{102abbc0-89b7-4506-a363-71b902640531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Base Class Headers">
+      <UniqueIdentifier>{f43b78bb-82da-4625-9843-2843a890fb7e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

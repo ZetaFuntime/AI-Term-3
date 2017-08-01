@@ -89,14 +89,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Agent.cpp" />
     <ClCompile Include="AIProjectApp.cpp" />
+    <ClCompile Include="ArrivalBehaviour.cpp" />
+    <ClCompile Include="FollowPathBehaviour.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Graph2D.cpp" />
+    <ClCompile Include="Graph2DRenderer.cpp" />
+    <ClCompile Include="KeyboardBehaviour.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Path.cpp" />
+    <ClCompile Include="Pathfinder.cpp" />
+    <ClCompile Include="SeekBehaviour.cpp" />
+    <ClCompile Include="WanderBehaviour.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Agent.h" />
     <ClInclude Include="AIProjectApp.h" />
+    <ClInclude Include="ArrivalBehaviour.h" />
     <ClInclude Include="Behaviour.h" />
+    <ClInclude Include="FollowPathBehaviour.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Graph.h" />
+    <ClInclude Include="Graph2D.h" />
+    <ClInclude Include="Graph2DRenderer.h" />
+    <ClInclude Include="KeyboardBehaviour.h" />
+    <ClInclude Include="Path.h" />
+    <ClInclude Include="Pathfinder.h" />
+    <ClInclude Include="SeekBehaviour.h" />
+    <ClInclude Include="WanderBehaviour.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
