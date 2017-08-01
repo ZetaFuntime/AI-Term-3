@@ -44,13 +44,14 @@ void ArrivalBehaviour::Update(GameObject *object, float deltaTime)
 
 void ArrivalBehaviour::Draw(GameObject *object, aie::Renderer2D *renderer)
 {
-	renderer->drawBox(m_targetPosition.x, m_targetPosition.y, 10.f, 10.f);
-
-	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.1f);
-	renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_slowingRadius);
-	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.2f);
-	renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_targetRadius);
-	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 1.0f);
+	if (IsDrawnByGameObject()) {
+		renderer->drawBox(m_targetPosition.x, m_targetPosition.y, 10.f, 10.f);
+		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.1f);
+		renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_slowingRadius);
+		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.2f);
+		renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_targetRadius);
+		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 1.0f);
+	}
 }
 
 const glm::vec2 &ArrivalBehaviour::GetTarget()

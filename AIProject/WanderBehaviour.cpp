@@ -8,10 +8,6 @@
 
 WanderBehaviour::WanderBehaviour() :
 	Behaviour(),
-	m_changetimePassed(0),
-	m_applytimePassed(0),
-	m_changeThreshold(0.0f),
-	m_timeThreshold(0.001f),
 	m_circleRadius(100.f),
 	m_forceStrength(100.f)
 {
@@ -70,15 +66,17 @@ void WanderBehaviour::Update(GameObject *object, float deltaTime)
 
 void WanderBehaviour::Draw(GameObject * object, aie::Renderer2D * renderer)
 {
-	glm::vec2 agentPos = object->GetPosition();
-	glm::vec2 wanderForce = m_circleCenter + m_displacement;
+	if (IsDrawnByGameObject()) {
+		glm::vec2 agentPos = object->GetPosition();
+		glm::vec2 wanderForce = m_circleCenter + m_displacement;
 
-	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.25f);
-	renderer->drawCircle(agentPos.x + m_circleCenter.x, agentPos.y + m_circleCenter.y, m_circleRadius);
+		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.25f);
+		renderer->drawCircle(agentPos.x + m_circleCenter.x, agentPos.y + m_circleCenter.y, m_circleRadius);
 
-	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 1.0f);
-	renderer->drawLine(agentPos.x, agentPos.y, agentPos.x + m_circleCenter.x, agentPos.y + m_circleCenter.y);
-	renderer->drawLine(agentPos.x, agentPos.y, agentPos.x + wanderForce.x, agentPos.y + wanderForce.y);
+		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 1.0f);
+		renderer->drawLine(agentPos.x, agentPos.y, agentPos.x + m_circleCenter.x, agentPos.y + m_circleCenter.y);
+		renderer->drawLine(agentPos.x, agentPos.y, agentPos.x + wanderForce.x, agentPos.y + wanderForce.y);
+	}
 }
 
 glm::vec2 WanderBehaviour::SetAngle(float strength, float wanderAngle)

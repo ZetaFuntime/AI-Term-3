@@ -23,6 +23,7 @@ struct Pos
 {
 	glm::vec2 data;
 	float rotation;
+	int colour;
 };
 
 class Agent : public GameObject
@@ -46,6 +47,7 @@ public:
 	//			 float coherenceWeight);
 
 	// Flock Behaviour variables - Todo
+
 protected:
 
 	//glm::vec2 Seperation(std::vector<Player *> &neighbours, float seperationRadius);

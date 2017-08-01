@@ -67,17 +67,48 @@ void FollowPathBehaviour::Draw(GameObject *object, aie::Renderer2D *renderer)
 	{
 		glm::vec2 point = (*iter);
 
-		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.5f);
-		renderer->drawCircle(point.x, point.y, m_nodeRadius);
-
-		unsigned int color = (index == m_currentPathNodeIndex) ? 0xFF7f00FF : 0xFFFFFFFF;
-
-		renderer->setRenderColour(color);
-		renderer->drawCircle(point.x, point.y, 4);
-		if (index > 0)
-		{
-			renderer->drawLine(point.x, point.y, lastPathPoint.x, lastPathPoint.y);
+		if (IsDrawnByGameObject()){
+			renderer->setRenderColour(
+				((iter == path.begin() || iter == path.end() - 1) && m_patrolMode) ? 0x1ABF1555 :
+				(iter == path.begin()) ? 0x0910F055 : 0xF1190B55);
+			if (iter == path.end()-1 || iter == path.begin())
+				renderer->drawCircle(point.x, point.y, m_nodeRadius);
+		} else {
+			renderer->setRenderColour(
+				((iter == path.begin() || iter == path.end() - 1) && m_patrolMode) ? 0x1ABF1555 :
+				(iter == path.begin()) ? 0x0910F055 :
+				(iter == path.end() - 1) ? 0xF1190B55 : 0xFFFFFF55);
+			renderer->drawCircle(point.x, point.y, m_nodeRadius);
 		}
+
+		// ------------------------------------------------------------------
+		//	If the first point of the path,				it is BLUE,
+		//  if the last point of the path,				it is RED,
+		//	if the current point being seeked to,		it is ORANGE
+		//	if the path is on patrol and is either end,	it is GREEN
+		// ------------------------------------------------------------------
+
+		if (IsDrawnByGameObject()) {
+			unsigned int color = (index == m_currentPathNodeIndex) ? 0xFF7f00FF : 0xFFFFFFFF;
+
+			renderer->setRenderColour(color);
+			renderer->drawCircle(point.x, point.y, 4);
+
+			renderer->setRenderColour(0xFFFFFFFF);
+
+			if (index > 0)
+			{
+				renderer->drawLine(point.x, point.y, lastPathPoint.x, lastPathPoint.y);
+			}
+		} else {
+			renderer->setRenderColour(0xFF7f00FF);
+
+			if (index == m_currentPathNodeIndex)
+			renderer->drawCircle(point.x, point.y, 4);
+
+			renderer->setRenderColour(0xFFFFFFFF);
+		}
+
 		lastPathPoint = point;
 	}
 
@@ -130,4 +161,9 @@ bool FollowPathBehaviour::GetPatrolActivity()
 bool FollowPathBehaviour::CheckPathComplete()
 {
 	return m_pathComplete;
+}
+
+void FollowPathBehaviour::OnEndPathEnter(std::function<void()> func)
+{
+	m_onEndPathEnter = func;
 }

@@ -60,6 +60,8 @@ Agent::Agent(aie::Texture *tex) :
 
 	prevLocation = GetPosition();
 	m_effectLength = 8.0f;
+
+	SetDraw(true);
 }
 
 Agent::~Agent()
@@ -146,11 +148,20 @@ void Agent::Update(float deltaTime)
 		SetBehaviour(m_keyboardBehaviour);
 	}
 
+	if (input->wasKeyPressed(aie::INPUT_KEY_UP))
+	{
+		SetDraw(true);
+	}
+	if (input->wasKeyPressed(aie::INPUT_KEY_DOWN))
+	{
+		SetDraw(false);
+	}
+
 	// Update all gameobjects currently in use
 	GameObject::Update(deltaTime);
 
 	// Update the trails left by player objects
-	/*DoTrailLogic();*/
+	DoTrailLogic();
 }
 
 void Agent::Draw(aie::Renderer2D *renderer)
@@ -162,7 +173,8 @@ void Agent::Draw(aie::Renderer2D *renderer)
 	// Draw path that has been travelled
 	for (auto iter = m_prevPoints.begin(); iter != m_prevPoints.end(); iter++)
 	{
-		renderer->setRenderColour(0xFFFFFFFF);
+
+		renderer->setRenderColour(iter->colour);
 		renderer->drawBox(iter->data.x, iter->data.y, 4.f, 1.f, iter->rotation);
 	}
 
@@ -246,6 +258,22 @@ void Agent::DoTrailLogic()
 		glm::vec2 targetHeading = prevPoint.data + GetVelocity();
 		prevPoint.rotation = atan2f(targetHeading.y - prevPoint.data.y,
 			targetHeading.x - prevPoint.data.x);
+
+		int randnum = rand() % 10;
+		switch (randnum)
+		{
+		case 1:		prevPoint.colour = BLUE;	break;
+		case 2:		prevPoint.colour = RED;		break;
+		case 3:		prevPoint.colour = YELLOW;	break;
+		case 4:		prevPoint.colour = GREEN;	break;
+		case 5:		prevPoint.colour = ORANGE;	break;
+		case 6:		prevPoint.colour = TEAL;	break;
+		case 7:		prevPoint.colour = PURPLE;	break;
+		case 8:		prevPoint.colour = PINK;	break;
+		case 9:		prevPoint.colour = WHITE;	break;
+		case 10:	prevPoint.colour = DARKBLUE; break;
+		default:	prevPoint.colour = WHITE;	break;
+		}
 
 		m_prevPoints.push_back(prevPoint);
 

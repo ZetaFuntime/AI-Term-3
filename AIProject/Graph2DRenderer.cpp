@@ -19,7 +19,6 @@ void Graph2DRenderer::Update(float dt)
 
 void Graph2DRenderer::Draw(aie::Renderer2D *renderer)
 {
-
 	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.25f);
 	// Render each of the nodes
 	auto &nodes = m_graph->GetNodes();

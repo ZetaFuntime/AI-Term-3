@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Behaviour.h"
+#include <functional>
 class Path;
 
 class FollowPathBehaviour : public Behaviour
@@ -26,12 +27,18 @@ public:
 
 	bool CheckPathComplete();
 
+	void OnEndPathEnter(std::function< void() > func);
+
 protected:
 
 	int m_currentPathNodeIndex;
+
 	Path *m_path;
+
 	float m_forceStrength;
 	float m_nodeRadius;
+
+	std::function< void() > m_onEndPathEnter;
 	bool m_patrolBack;
 	bool m_patrolMode;
 	bool m_pathComplete;

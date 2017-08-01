@@ -17,15 +17,7 @@ public:
 
 protected:
 
-	float m_changetimePassed;
-	float m_applytimePassed;
-	float m_timeThreshold;
-	float m_changeThreshold;
-
-	glm::vec2 m_wanderVector;
 	float m_wanderAngle;
-	int m_appliedForce;
-
 	glm::vec2 m_circleCenter;
 	glm::vec2 m_displacement;
 	float m_circleRadius;

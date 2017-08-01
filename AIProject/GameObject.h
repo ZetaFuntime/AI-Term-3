@@ -13,7 +13,7 @@ enum ColourPalette
 	YELLOW = 0xE5EC13FF, ORANGE = 0xF1740BFF, 
 	TEAL = 0x11E3DDFF, RED = 0xF1190BFF, 
 	PURPLE = 0x7411E3FF, WHITE = 0xFFFFFFFF, 
-	PINK = 0xFA22EA
+	PINK = 0xFA22EA, DARKBLUE = 0x012345FF
 };
 
 class Behaviour;
@@ -36,10 +36,13 @@ public:
 
 #pragma region Setters
 
+	void SetTexture(aie::Texture *tex);
 	void SetPosition(const glm::vec2 &pos);
 	void SetVelocity(const glm::vec2 &vel);
 	void SetFriction(float friction);
 	void SetBehaviour(Behaviour *behaviour);
+	void SetSize(float size);
+	void SetDraw(bool draw);
 	void SetColour(int id);
 
 #pragma endregion
@@ -50,6 +53,8 @@ public:
 
 #pragma region Getters
 	
+	bool GetDraw();
+	float GetSize();
 	const glm::vec2 & GetPosition();
 	const glm::vec2 & GetVelocity();
 	float GetFriction();
@@ -67,6 +72,7 @@ protected:
 	bool isDrawn;
 	float m_rotation;
 	float m_friction;
+	float m_size;
 
 	aie::Texture	*m_tex;
 	Behaviour		*m_behaviour;

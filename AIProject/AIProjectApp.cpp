@@ -10,7 +10,7 @@
 #include "Graph.h"
 #include "Graph2D.h"
 #include "Graph2DRenderer.h"
-
+#include <vector>
 #include <glm\glm.hpp>
 
 AIProjectApp::AIProjectApp() {
@@ -26,6 +26,7 @@ bool AIProjectApp::startup() {
 	m_2dRenderer = new aie::Renderer2D();
 	m_font = new aie::Font("./font/consolas.ttf", 32);
 
+	m_agentTex = new aie::Texture("./textures/Agent.png");
 	m_graph = new Graph2D();
 	m_graphRenderer = new Graph2DRenderer();
 	m_graphRenderer->SetGraph(m_graph);
@@ -56,10 +57,18 @@ void AIProjectApp::update(float deltaTime) {
 
 	// input example
 	aie::Input* input = aie::Input::getInstance();
+	int mouseX, mouseY;
+	input->getMouseXY(&mouseX, &mouseY);
+	m_mousePos = glm::vec2(mouseX, mouseY);
 
 	// exit the application
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
+
+	if (input->isKeyDown(aie::INPUT_KEY_F1))
+	{
+		AddAgent();
+	}
 
 	m_graphRenderer->Update(deltaTime);
 
@@ -71,8 +80,10 @@ void AIProjectApp::update(float deltaTime) {
 
 	UpdateGraph(deltaTime);
 
+	// ----------------------------------
 	// wrap the player around the screen
-	// ---------------------------------
+	// ----------------------------------
+
 	for (auto iter = m_Agents.begin(); iter != m_Agents.end(); iter++)
 	{
 		//-----------------Original code for wrapping the agents around the screen-------------
@@ -94,6 +105,38 @@ void AIProjectApp::update(float deltaTime) {
 		//const glm::vec2 &agentPos = (*iter)->GetPosition();
 		//if (agentPos.x < 0 || agentPos.x > getWindowWidth()) (*iter)->ApplyForce(glm::vec2(-(agentVel.x*2),0));
 		//if (agentPos.y < 0 || agentPos.y > getWindowHeight()) (*iter)->ApplyForce(glm::vec2(0, -agentVel.y*2));
+	}
+
+	// -----------------------------------------------------------------------
+	// If Agents are colliding with each other, apply a force to move them off
+	// each other's radii
+	// -----------------------------------------------------------------------
+
+	std::vector<Agent* > m_neighbours = m_Agents;
+	for (auto iter = m_Agents.begin(); iter != m_Agents.end(); iter++)
+	{
+		const glm::vec2 &agentPos = (*iter)->GetPosition();
+		const glm::vec2 &agentVel = (*iter)->GetVelocity();
+		float agentSize = (*iter)->GetSize();
+		
+		for (auto eiter = m_neighbours.begin(); eiter != m_neighbours.end(); eiter++)
+		{
+			const glm::vec2 &neighbourPos = (*eiter)->GetPosition();
+			const glm::vec2 &neighbourVel = (*eiter)->GetVelocity();
+			float neighbourSize = (*eiter)->GetSize();
+
+			// Detect if the agent and the neighbour are within each other's size circle
+			if (glm::length(agentPos - neighbourPos) < (agentSize + neighbourSize) / 2 && iter != eiter){
+				
+				// Calculate the repulsion force
+				float intensityRatio = (agentSize + neighbourSize) / glm::length(agentPos - neighbourPos);
+				float m_forceStrength = 100.f;
+
+				glm::vec2 pushForce = glm::normalize(agentPos - neighbourPos);
+				(*iter)->ApplyForce(pushForce*m_forceStrength*intensityRatio);
+				(*eiter)->ApplyForce(-pushForce*m_forceStrength*intensityRatio);
+			}
+		}
 	}
 
 }
@@ -197,6 +240,7 @@ void AIProjectApp::UpdateGraph(float deltaTime)
 void AIProjectApp::AddAgent()
 {
 	m_agent = new Agent();
+	m_agent->SetTexture(m_agentTex);
 	m_agent->SetPosition(glm::vec2(getWindowWidth()*0.5f, getWindowHeight()*0.5f));
 	m_agent->SetGraph(m_graph);
 	m_agent->ApplyForce(glm::vec2(1, 1));

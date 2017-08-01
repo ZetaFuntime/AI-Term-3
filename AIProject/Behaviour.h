@@ -21,7 +21,7 @@ public:
 	void IsOwnedByGameObject(bool isOwned) { m_isOwned = isOwned; }
 
 	bool IsDrawnByGameObject() { return m_isDrawn; }
-	void IsDrawnByGameObject(bool isDrawn) { m_isDrawn = isDrawn; }
+	void UpdateDrawnByGameObject(bool isDrawn) { m_isDrawn = isDrawn; }
 
 protected:
 

@@ -2,6 +2,7 @@
 
 #include "Application.h"
 #include "Renderer2D.h"
+
 #include <glm\vec2.hpp>
 #include <vector>
 
@@ -36,8 +37,11 @@ protected:
 	float				m_graphToMouseDistance;
 
 	std::vector<Agent* > m_Agents;
-	Agent *m_agent = nullptr;
 
-	Graph2D *m_graph;
+	Agent			*m_agent = nullptr;
+	Graph2D			*m_graph;
+
+	aie::Texture	*m_agentTex = nullptr;
+	
 	Graph2DRenderer *m_graphRenderer;
 };

@@ -45,15 +45,17 @@ void SeekBehaviour::Update(GameObject *object, float deltaTime)
 
 void SeekBehaviour::Draw(GameObject * object, aie::Renderer2D *renderer)
 {
-	renderer->drawBox(m_targetPosition.x, m_targetPosition.y, 10.f, 10.f);
+	if (IsDrawnByGameObject()) {
+		renderer->drawBox(m_targetPosition.x, m_targetPosition.y, 10.f, 10.f);
 
-	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.5f);
-	renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_innerRadius);
+		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.5f);
+		renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_innerRadius);
 
-	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.1f);
-	renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_outerRadius);
+		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.1f);
+		renderer->drawCircle(m_targetPosition.x, m_targetPosition.y, m_outerRadius);
 
-	renderer->setRenderColour(1.0f, 1.0f, 1.0f, 1.0f);
+		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 1.0f);
+	}
 }
 
 const glm::vec2 &SeekBehaviour::GetTarget()
